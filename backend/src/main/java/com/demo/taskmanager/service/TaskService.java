@@ -17,8 +17,6 @@ import com.demo.taskmanager.dto.TaskResponse;
 import com.demo.taskmanager.dto.UserResponse;
 import com.demo.taskmanager.exception.BusinessException;
 import com.demo.taskmanager.exception.ResourceNotFoundException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,9 +30,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TaskService {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
@@ -217,11 +212,7 @@ public class TaskService {
     }
 
     public List<TaskResponse> search(Long userId, String title) {
-        // SONAR-DEMO: concatenação de entrada do usuário em JPQL, vulnerável a injeção
-        String jpql = "SELECT t FROM Task t WHERE t.user.id = " + userId
-                + " AND t.title LIKE '%" + title + "%'";
-
-        return entityManager.createQuery(jpql, Task.class).getResultList().stream()
+        return taskRepository.searchByTitleUnsafe(userId, title).stream()
                 .map(this::toResponse)
                 .toList();
     }
