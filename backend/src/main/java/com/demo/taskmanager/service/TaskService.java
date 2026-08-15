@@ -98,6 +98,7 @@ public class TaskService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", userId));
+                
 
         Category category = null;
         if (request.getCategoryId() != null) {
