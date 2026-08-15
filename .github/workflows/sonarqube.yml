@@ -39,6 +39,7 @@ jobs:
       - name: Build, test and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: >
           mvn -B clean verify sonar:sonar
           -Dsonar.projectKey=taskmanager-backend
