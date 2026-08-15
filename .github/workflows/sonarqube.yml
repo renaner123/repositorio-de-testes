@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - github-ci-cd
   pull_request:
     branches:
       - main
@@ -40,7 +39,6 @@ jobs:
       - name: Build, test and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: >
           mvn -B clean verify sonar:sonar
           -Dsonar.projectKey=taskmanager-backend
@@ -79,7 +77,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-        args: >
-          -Dsonar.projectKey=project-key
-          -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
