@@ -48,6 +48,7 @@ jobs:
           -Dsonar.projectKey=taskmanager-backend
           -Dsonar.host.url=$SONAR_HOST_URL
           -Dsonar.token=$SONAR_TOKEN
+          -Dsonar.qualitygate.wait=true
 
   frontend:
     name: Frontend (Vue / Vitest)
