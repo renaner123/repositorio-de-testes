@@ -29,9 +29,9 @@
         <sonar.organization>renaner123</sonar.organization>
         <sonar.projectKey>taskmanager-backend</sonar.projectKey>
         <sonar.projectName>Task Manager Backend</sonar.projectName>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            target/site/jacoco/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <jacoco.destFile>${project.basedir}/target/jacoco.exec</jacoco.destFile>
+        <jacoco.xmlReportDir>${project.basedir}/target/site/jacoco</jacoco.xmlReportDir>
     </properties>
 
     <dependencies>
@@ -128,6 +128,9 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <destFile>${jacoco.destFile}</destFile>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>report</id>
@@ -136,7 +139,12 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>target/site/jacoco</outputDirectory>
+                            <dataFile>${jacoco.destFile}</dataFile>
+                            <outputDirectory>${jacoco.xmlReportDir}</outputDirectory>
+                            <formats>
+                                <format>XML</format>
+                                <format>HTML</format>
+                            </formats>
                         </configuration>
                     </execution>
                 </executions>
