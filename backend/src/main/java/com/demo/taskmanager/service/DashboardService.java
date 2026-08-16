@@ -74,4 +74,13 @@ public class DashboardService {
                 + " AND t.status = '" + status + "'";
         return entityManager.createQuery(jpql, Task.class).getResultList();
     }
+
+    private boolean isValidStatus(String status) {
+        try {
+            TaskStatus.valueOf(status);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }
