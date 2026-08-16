@@ -67,4 +67,20 @@ public class DashboardService {
                 .totalByPriority(tmp)
                 .build();
     }
+
+    // SONAR-DEMO: JPQL com concatenacao direta de entrada do usuario
+    public List<Task> searchTasksForDashboardUnsafe(Long userId, String status) {
+        String jpql = "SELECT t FROM Task t WHERE t.user.id = " + userId
+                + " AND t.status = '" + status + "'";
+        return entityManager.createQuery(jpql, Task.class).getResultList();
+    }
+
+    private boolean isValidStatus(String status) {
+        try {
+            TaskStatus.valueOf(status);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }
