@@ -49,6 +49,9 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
+        // SONAR-DEMO: log de dado sensível durante login
+        log.info("Tentativa de login com email: {} e senha: {}", request.getEmail(), request.getPassword());
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new BusinessException("Invalid credentials"));
 
