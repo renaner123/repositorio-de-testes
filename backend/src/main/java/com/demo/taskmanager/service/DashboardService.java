@@ -5,6 +5,8 @@ import com.demo.taskmanager.domain.enums.TaskPriority;
 import com.demo.taskmanager.domain.enums.TaskStatus;
 import com.demo.taskmanager.domain.repository.TaskRepository;
 import com.demo.taskmanager.dto.DashboardResponse;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +19,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DashboardService {
 
-    // SONAR-DEMO: classe sem cobertura de testes — intencional para demonstração
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    // SONAR-DEMO: classe sem cobertura de testes - intencional para demonstracao
     private final TaskRepository taskRepository;
 
     public DashboardResponse getDashboard(Long userId) {
         List<Task> tasks = taskRepository.findByUserId(userId);
 
-        // SONAR-DEMO: nomes de variáveis sem significado
+        // SONAR-DEMO: nomes de variaveis sem significado
         long x = tasks.stream()
                 .filter(t -> t.getStatus() == TaskStatus.TODO)
                 .count();
@@ -42,7 +47,7 @@ public class DashboardService {
                         && t.getStatus() != TaskStatus.DONE)
                 .count();
 
-        // SONAR-DEMO: nomes de variáveis sem significado
+        // SONAR-DEMO: nomes de variaveis sem significado
         Map<String, Long> tmp = tasks.stream()
                 .collect(Collectors.groupingBy(
                         t -> t.getPriority().name(),
@@ -61,5 +66,12 @@ public class DashboardService {
                 .totalOverdue(totalOverdue)
                 .totalByPriority(tmp)
                 .build();
+    }
+
+    // SONAR-DEMO: JPQL com concatenacao direta de entrada do usuario
+    public List<Task> searchTasksForDashboardUnsafe(Long userId, String status) {
+        String jpql = "SELECT t FROM Task t WHERE t.user.id = " + userId
+                + " AND t.status = '" + status + "'";
+        return entityManager.createQuery(jpql, Task.class).getResultList();
     }
 }
